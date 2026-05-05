@@ -6,6 +6,7 @@ import net.Edigest.journal.App.entity.journalEntry;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ public class journalEntryService {
     @Autowired
     private UserService userService;
 
+    @Transactional
     public void saveEntry(journalEntry journalEntry,String userName){
         User user=userService.findUserByName(userName);
         journalEntry.setDate(LocalDateTime.now());
