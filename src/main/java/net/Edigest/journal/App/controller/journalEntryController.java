@@ -1,5 +1,4 @@
 package net.Edigest.journal.App.controller;
-
 import net.Edigest.journal.App.entity.User;
 import net.Edigest.journal.App.entity.journalEntry;
 import net.Edigest.journal.App.service.UserService;
