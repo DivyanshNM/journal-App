@@ -10,12 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
 @RestController
-@RequestMapping("/journal")
+@RequestMapping("journal")
 public class journalEntryController {
 
     @Autowired
@@ -26,8 +27,10 @@ public class journalEntryController {
     @GetMapping("{userName}")
     public ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName){
         User user=userService.findUserByName(userName);
-        PriorityQueue<journalEntry> all=user.getJournalEntries();
+        if(user==null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<journalEntry> all=user.getJournalEntries();
         if(all!=null && !all.isEmpty()) {
+            all.sort((a,b)->b.getPriority()-a.getPriority());
             return new ResponseEntity<>(all,HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -39,6 +42,7 @@ public class journalEntryController {
             journalEntryService.saveEntry(myEntry,userName);
             return new ResponseEntity<>(myEntry,HttpStatus.OK);
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
