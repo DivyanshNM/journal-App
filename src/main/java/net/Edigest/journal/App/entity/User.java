@@ -12,13 +12,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 @Document(collection = "Users")
 @Data
 @NoArgsConstructor
 public class User {
-    @Id
-    private ObjectId id;
+//    @Id
+//    private ObjectId id;
     @Indexed(unique = true)
     @NonNull
     private String userName;
@@ -26,6 +27,7 @@ public class User {
     private String Password;
 
     @DBRef
-    List<journalEntry> journalEntries=new ArrayList<>();
+    PriorityQueue<journalEntry> journalEntries=new PriorityQueue<>((a,b)->b.getPriority()-a.getPriority());
+//    List<journalEntry> journalEntries=new ArrayList<>();
 
 }

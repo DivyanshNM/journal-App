@@ -20,5 +20,6 @@ public class journalEntry {
     @NonNull
     private String title;
     private String content;
+    private int priority;
     private LocalDateTime date;
 }

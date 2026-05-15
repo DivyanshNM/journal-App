@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
 
 @RestController
 @RequestMapping("/journal")
@@ -25,7 +26,7 @@ public class journalEntryController {
     @GetMapping("{userName}")
     public ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName){
         User user=userService.findUserByName(userName);
-        List<journalEntry> all=user.getJournalEntries();
+        PriorityQueue<journalEntry> all=user.getJournalEntries();
         if(all!=null && !all.isEmpty()) {
             return new ResponseEntity<>(all,HttpStatus.OK);
         }else{
@@ -41,15 +42,15 @@ public class journalEntryController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/id/{myid}")
-    public ResponseEntity<journalEntry> getJournalEntryById(@PathVariable ObjectId myid){
-        Optional<journalEntry> journalEntry=journalEntryService.findById(myid);
-        if(journalEntry.isPresent()){
-            return new ResponseEntity(journalEntry.get(), HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @GetMapping("/id/{myid}")
+//    public ResponseEntity<journalEntry> getJournalEntryById(@PathVariable ObjectId myid){
+//        Optional<journalEntry> journalEntry=journalEntryService.findById(myid);
+//        if(journalEntry.isPresent()){
+//            return new ResponseEntity(journalEntry.get(), HttpStatus.OK);
+//        }else{
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
     @DeleteMapping("id/{username}/{myid}")
     public boolean  deleteJournalById(@PathVariable ObjectId myid,@PathVariable String userName){
         journalEntryService.deleteById(myid,userName);

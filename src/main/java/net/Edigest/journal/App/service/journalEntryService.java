@@ -34,6 +34,7 @@ public class journalEntryService {
     public Optional<journalEntry> findById(ObjectId id){
         return journalEntryRepository.findById(id);
     }
+    @Transactional
     public void deleteById(ObjectId id,String userName){
         User user=userService.findUserByName(userName);
         user.getJournalEntries().removeIf(x-> x.getId()==id);
