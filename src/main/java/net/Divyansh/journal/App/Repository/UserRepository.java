@@ -1,9 +1,10 @@
-package net.Edigest.journal.App.Repository;
-import net.Edigest.journal.App.entity.User;
-import net.Edigest.journal.App.entity.journalEntry;
+package net.Divyansh.journal.App.Repository;
+import net.Divyansh.journal.App.entity.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserRepository extends MongoRepository<User, ObjectId> {
     User findByUserName(String userName);
     void deleteByUserName(String userName);

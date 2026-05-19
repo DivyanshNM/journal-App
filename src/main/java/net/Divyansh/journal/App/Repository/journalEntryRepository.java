@@ -1,5 +1,5 @@
-package net.Edigest.journal.App.Repository;
-import net.Edigest.journal.App.entity.journalEntry;
+package net.Divyansh.journal.App.Repository;
+import net.Divyansh.journal.App.entity.journalEntry;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

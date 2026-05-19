@@ -1,4 +1,4 @@
-package net.Edigest.journal.App.entity;
+package net.Divyansh.journal.App.entity;
 
 import lombok.Data;
 import lombok.Getter;
@@ -20,6 +20,6 @@ public class journalEntry {
     @NonNull
     private String title;
     private String content;
-    private int priority;
+    private int priority=1;
     private LocalDateTime date;
 }

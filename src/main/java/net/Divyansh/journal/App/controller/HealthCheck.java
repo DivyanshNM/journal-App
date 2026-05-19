@@ -1,4 +1,4 @@
-package net.Edigest.journal.App.controller;
+package net.Divyansh.journal.App.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

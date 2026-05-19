@@ -1,4 +1,4 @@
-package net.Edigest.journal.App;
+package net.Divyansh.journal.App;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package net.Edigest.journal.App;
+package net.Divyansh.journal.App;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

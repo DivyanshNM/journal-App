@@ -1,8 +1,8 @@
-package net.Edigest.journal.App.service;
+package net.Divyansh.journal.App.service;
 
-import net.Edigest.journal.App.Repository.journalEntryRepository;
-import net.Edigest.journal.App.entity.User;
-import net.Edigest.journal.App.entity.journalEntry;
+import net.Divyansh.journal.App.Repository.journalEntryRepository;
+import net.Divyansh.journal.App.entity.User;
+import net.Divyansh.journal.App.entity.journalEntry;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

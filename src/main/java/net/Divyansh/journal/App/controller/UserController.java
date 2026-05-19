@@ -1,28 +1,25 @@
-package net.Edigest.journal.App.controller;
+package net.Divyansh.journal.App.controller;
 
-import net.Edigest.journal.App.Repository.UserRepository;
-import net.Edigest.journal.App.entity.User;
-import net.Edigest.journal.App.entity.journalEntry;
-import net.Edigest.journal.App.service.UserService;
-import net.Edigest.journal.App.service.journalEntryService;
-import org.bson.types.ObjectId;
+import net.Divyansh.journal.App.entity.User;
+import net.Divyansh.journal.App.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 
 public class UserController {
 
     @Autowired
     private UserService userService ;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<User> getAllUsers(){
@@ -30,7 +27,9 @@ public class UserController {
     }
     @PostMapping
     public boolean createUser(@RequestBody User myEntry){
+//        System.out.println(myEntry.getPassword());
         if(userService.findUserByName(myEntry.getUserName())==null){
+            myEntry.setPassword(passwordEncoder.encode(myEntry.getPassword()));
             userService.saveEntry(myEntry);
             return true;
         }else return false;
@@ -58,7 +57,7 @@ public class UserController {
 //            return new ResponseEntity<>(HttpStatus.OK);
 //        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //    }
-    @DeleteMapping("{username}")
+    @DeleteMapping("/deleteUser/{username}")
     public ResponseEntity<User>  deleteUserByName(@PathVariable String username){
         if(userService.findUserByName(username)!=null){
             User userInDb=userService.findUserByName(username);
@@ -67,12 +66,12 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @PutMapping("name/{name}")
+    @PutMapping("/putUser/{name}")
     public User updateById(@PathVariable String name,@RequestBody User newEntry){
         Optional<User> old= Optional.ofNullable(userService.findUserByName(name));
         if(old.isPresent()){
-            old.get().setPassword(newEntry.getPassword()!=null && !newEntry.getPassword().equals("")?newEntry.getPassword():old.get().getPassword());
-            old.get().setUserName(newEntry.getUserName()!=null && !newEntry.getUserName().equals("")?newEntry.getUserName():old.get().getUserName());
+            old.get().setPassword(!newEntry.getPassword().isEmpty() ?passwordEncoder.encode(newEntry.getPassword()):old.get().getPassword());
+            old.get().setUserName(!newEntry.getUserName().isEmpty() ?newEntry.getUserName():old.get().getUserName());
         }
         userService.saveEntry(old.get());
         return old.get();

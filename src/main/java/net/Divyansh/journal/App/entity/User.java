@@ -1,5 +1,7 @@
-package net.Edigest.journal.App.entity;
+package net.Divyansh.journal.App.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -9,10 +11,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 @Document(collection = "Users")
 @Data
@@ -24,7 +24,8 @@ public class User {
     @NonNull
     private String userName;
     @NonNull
-    private String Password;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     @DBRef
 //    PriorityQueue<journalEntry> journalEntries=new PriorityQueue<>((a,b)->b.getPriority()-a.getPriority());
