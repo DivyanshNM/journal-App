@@ -27,48 +27,21 @@ public class UserController {
     }
     @PostMapping
     public boolean createUser(@RequestBody User myEntry){
-//        System.out.println(myEntry.getPassword());
-        if(userService.findUserByName(myEntry.getUserName())==null){
-            myEntry.setPassword(passwordEncoder.encode(myEntry.getPassword()));
-            userService.saveEntry(myEntry);
-            return true;
-        }else return false;
+        return userService.saveEntry(myEntry);
     }
-//    @GetMapping("/id/{myid}")
-//    public ResponseEntity<User> getUserEntryById(@PathVariable ObjectId myid){
-//        Optional<User> user=userService.findById(myid);
-//        if(user.isPresent()){
-//            return new ResponseEntity<>(user.get(), HttpStatus.OK);
-//        }else{
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
     @GetMapping("/userName/{name}")
     public ResponseEntity<User> getUserEntryByName(@PathVariable String name){
-        User userInDb=userService.findUserByName(name);
-        if(userInDb!=null){
-            return new ResponseEntity<>(userInDb,HttpStatus.OK);
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return userService.findUserByName(name);
     }
-//    @DeleteMapping("id/{myid}")
-//    public ResponseEntity<User>  deleteUserById(@PathVariable ObjectId myid){
-//        if(userService.findById(myid).isPresent()){
-//            userService.deleteById(myid);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
+
     @DeleteMapping("/deleteUser/{username}")
-    public ResponseEntity<User>  deleteUserByName(@PathVariable String username){
-        if(userService.findUserByName(username)!=null){
-            User userInDb=userService.findUserByName(username);
-            userService.deleteByName(userInDb.getUserName());
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Void> deleteByUsername(@PathVariable String username){
+        return userService.deleteByUsername(username);
     }
     @PutMapping("/putUser/{name}")
     public User updateById(@PathVariable String name,@RequestBody User newEntry){
-        Optional<User> old= Optional.ofNullable(userService.findUserByName(name));
+        Optional<User> old= Optional.ofNullable(userService.findUserByName(name).getBody());
         if(old.isPresent()){
             old.get().setPassword(!newEntry.getPassword().isEmpty() ?passwordEncoder.encode(newEntry.getPassword()):old.get().getPassword());
             old.get().setUserName(!newEntry.getUserName().isEmpty() ?newEntry.getUserName():old.get().getUserName());

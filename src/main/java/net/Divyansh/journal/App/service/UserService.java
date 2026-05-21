@@ -4,10 +4,12 @@ import net.Divyansh.journal.App.Repository.UserRepository;
 import net.Divyansh.journal.App.entity.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +20,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public void saveEntry(User user){
-        userRepository.save(user);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    public boolean saveEntry(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(userRepository.findByUserName(user.getUserName())==null){
+            userRepository.save(user);
+            return true;
+        }else return false;
     }
 
     public List<User>  getAll(){
@@ -28,11 +36,17 @@ public class UserService implements UserDetailsService {
     public Optional<User> findById(ObjectId id){
         return userRepository.findById(id);
     }
-    public void deleteByName(String username){
-        userRepository.deleteByUserName(username);
+    public ResponseEntity<Void> deleteByUsername(String username){
+        Optional<User> user=Optional.ofNullable(userRepository.findByUserName(username));
+        if(user.isPresent()){
+            userRepository.deleteByUserName(username);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    public User findUserByName(String UserName){
-        return userRepository.findByUserName(UserName);
+    public ResponseEntity<User> findUserByName(String userName){
+        Optional<User> user=Optional.ofNullable(userRepository.findByUserName(userName));
+        if(user.isPresent()) return new ResponseEntity<>(user.get(),HttpStatus.OK);
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override

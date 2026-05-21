@@ -20,11 +20,10 @@ public class journalEntryController {
 
     @Autowired
     private UserService userService;
+
     @GetMapping("/getAll/{userName}")
     public ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName){
-        User user=userService.findUserByName(userName);
-        if(user==null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<journalEntry> all=user.getJournalEntries();
+        List<journalEntry> all=journalEntryService.getAllEntriesOfUser(userName);
         if(all!=null && !all.isEmpty()) {
             all.sort((a,b)->b.getPriority()-a.getPriority());
             return new ResponseEntity<>(all,HttpStatus.OK);
