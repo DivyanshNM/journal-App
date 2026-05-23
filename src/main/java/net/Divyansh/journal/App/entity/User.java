@@ -30,5 +30,5 @@ public class User {
     @DBRef
 //    PriorityQueue<journalEntry> journalEntries=new PriorityQueue<>((a,b)->b.getPriority()-a.getPriority());
     List<journalEntry> journalEntries=new ArrayList<>();
-
+    private List<String> roles;
 }

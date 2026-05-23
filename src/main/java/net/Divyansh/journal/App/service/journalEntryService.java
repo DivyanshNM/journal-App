@@ -22,12 +22,14 @@ public class journalEntryService {
     private UserService userService;
 
     @Transactional
-    public void saveEntry(journalEntry journalEntry, String userName) {
-        User user = userService.findUserByName(userName).getBody();
+    public boolean saveEntry(journalEntry journalEntry, String userName) {
+        Optional<User> user =Optional.ofNullable( userService.findUserByName(userName).getBody());
+        if(!user.isPresent()) return false;
         journalEntry.setDate(LocalDateTime.now());
         journalEntry saved = journalEntryRepository.save(journalEntry);
-        user.getJournalEntries().add(saved);
-        userService.saveEntry(user);
+        user.get().getJournalEntries().add(saved);
+        userService.addEntryInUser(user.get());
+        return true;
     }
 
     public List<journalEntry> getAllEntriesOfUser(String userName) {
@@ -35,7 +37,16 @@ public class journalEntryService {
         if(user.isPresent())return user.get().getJournalEntries();
         else return Collections.emptyList();
     }
-
+    public Optional<journalEntry> getNextEntryOfUser(String userName){
+        Optional<User> user= Optional.ofNullable(userService.findUserByName(userName).getBody());
+        if(user.isPresent()){
+            List<journalEntry> list=user.get().getJournalEntries();
+            if(list.isEmpty()) return Optional.empty();
+            Collections.sort(list,(a,b)->b.getPriority()-a.getPriority());
+            return Optional.of(list.get(0));
+        }
+        return Optional.empty();
+    }
     public Optional<journalEntry> findById(ObjectId id) {
         return journalEntryRepository.findById(id);
     }

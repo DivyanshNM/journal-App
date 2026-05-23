@@ -21,10 +21,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
-                .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/journal/**","/userName/**")
-                        .authenticated()
+        HttpSecurity httpSecurity = http.csrf().disable()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/journal/**",
+                                "/user/userName/**"
+                                , "/user/updateUser/**", "/journal/getNextEntry/**","journal/postJournal")
+                        .hasRole("USER")
+                        .requestMatchers("/user/deleteUser/**")
+                        .hasAnyRole("ADMIN", "USER")
                         .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults());
         return http.build();

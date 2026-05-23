@@ -29,7 +29,9 @@ public class UserService implements UserDetailsService {
             return true;
         }else return false;
     }
-
+    public void addEntryInUser(User user){
+        userRepository.save(user);
+    }
     public List<User>  getAll(){
         return userRepository.findAll();
     }
@@ -57,7 +59,7 @@ public class UserService implements UserDetailsService {
                 .builder()
                 .username(user.getUserName())
                 .password(user.getPassword())
-                .roles("USER")
+                .roles(user.getRoles().toArray(new String[0]))
                 .build();
     }
 }
