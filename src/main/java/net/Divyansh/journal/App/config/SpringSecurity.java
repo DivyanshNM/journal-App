@@ -21,11 +21,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        HttpSecurity httpSecurity = http.csrf().disable()
+        http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/journal/**",
                                 "/user/userName/**"
-                                , "/user/updateUser/**", "/journal/getNextEntry/**","journal/postJournal")
+                                , "/user/updateUser/**", "/journal/getNextEntry/**","journal/postJournal"
+                                ,"/user/getUser/**")
                         .hasRole("USER")
                         .requestMatchers("/user/deleteUser/**")
                         .hasAnyRole("ADMIN", "USER")

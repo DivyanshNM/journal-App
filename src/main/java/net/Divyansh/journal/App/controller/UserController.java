@@ -28,7 +28,15 @@ public class UserController {
         return userService.getAll();
     }
 
-
+    @GetMapping("/getUser/{userName}")
+    public ResponseEntity<User> getUser(@PathVariable String userName){
+        Optional<User> user=Optional.ofNullable(userService.findUserByName(userName).getBody());
+        if(user.isPresent()){
+            Collections.sort(user.get().getJournalEntries(),(a,b)->b.getPriority()-a.getPriority());
+            return new ResponseEntity<>(user.get(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     @PostMapping("/createUser")
     public boolean createUser(@RequestBody User myEntry){
         return userService.saveEntry(myEntry);
